@@ -15,12 +15,7 @@ class Detector:
     
     def initailize(self):
         self.models = {
-            "yolov11n": YOLO("models/yolov11n.pt"),
-            "yolov11n_v2": YOLO("models/yolo11n_100p_v5.pt"),
-            "yolov9c":  YOLO("models/yolov9c.pt"),
-            "yolov8n": YOLO("models/yolov8n.pt"),
-            "yolov5x6u": YOLO("models/yolov5x6u.pt"),
-            "yolov5su": YOLO("models/yolov5su.pt"),
+            "yolov9c":  YOLO("yolov9c_100epoch.pt"),
         }
     
     def detection(self, model_name, image):
