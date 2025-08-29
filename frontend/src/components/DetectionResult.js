@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import { Card, CardContent, Typography, Box } from "@mui/material";
 
 function DetectionResult({ boxes, imageUrl }) {
   const canvasRef = useRef(null);
@@ -20,7 +21,7 @@ function DetectionResult({ boxes, imageUrl }) {
       ctx.drawImage(img, 0, 0);
 
       // Draw boxes
-      ctx.strokeStyle = "red";
+      ctx.strokeStyle = "#ff1744"; // red accent
       ctx.lineWidth = 2;
       boxes.forEach(([x, y, w, h]) => {
         const x1 = x - w / 2;
@@ -33,10 +34,45 @@ function DetectionResult({ boxes, imageUrl }) {
   if (!imageUrl) return null;
 
   return (
-    <div className="result-container">
-      <h3>Detection Result</h3>
-      <canvas ref={canvasRef} className="result-canvas" />
-    </div>
+    <Card
+      sx={{
+        maxWidth: 800,
+        mx: "auto",
+        mt: 4,
+        borderRadius: 3,
+        boxShadow: 4,
+      }}
+    >
+      <CardContent>
+        <Typography
+          variant="h6"
+          align="center"
+          gutterBottom
+          sx={{ fontWeight: 600 }}
+        >
+          Detection Result
+        </Typography>
+
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            overflow: "auto",
+            borderRadius: 2,
+            border: "1px solid #e0e0e0",
+            p: 1,
+            backgroundColor: "#fafafa",
+          }}
+        >
+          <canvas
+            ref={canvasRef}
+            className="result-canvas"
+            style={{ maxWidth: "100%", height: "auto", borderRadius: "8px" }}
+          />
+        </Box>
+      </CardContent>
+    </Card>
   );
 }
 
