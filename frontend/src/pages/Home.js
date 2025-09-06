@@ -1,6 +1,16 @@
 import React, { useState } from "react";
+import {
+  Container,
+  Typography,
+  Card,
+  CardContent,
+  Button,
+  Box,
+  CircularProgress
+} from "@mui/material";
 import ImageUploader from "../components/ImageUploader";
 import DetectionResult from "../components/DetectionResult";
+import SearchIcon from "@mui/icons-material/Search";
 
 function Home() {
   const [image, setImage] = useState(null);
@@ -8,49 +18,87 @@ function Home() {
   const [boxes, setBoxes] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  const handleUpload = (file, url) => {
+  const handleUpload = (file, previewUrl) => {
     setImage(file);
-    setImageUrl(url);
-    setBoxes([]); // reset when new image uploaded
+    setImageUrl(previewUrl);
   };
 
   const handleDetect = async () => {
-    if (!image) return;
     setLoading(true);
 
-    const formData = new FormData();
-    formData.append("file", image);
-    formData.append("model_name", "yolov9c");
-
-    try {
-      const res = await fetch("http://localhost:8000/detect", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await res.json();
-      setBoxes(data.boxes);
-    } catch (error) {
-      console.error("Error:", error);
-      alert("Detection failed. Is backend running?");
-    }
-    setLoading(false);
+    // TODO: Call your YOLO detection API here
+    // Mock delay
+    setTimeout(() => {
+      setBoxes([
+        [150, 120, 100, 80], // mock box
+        [300, 220, 120, 90] // another mock box
+      ]);
+      setLoading(false);
+    }, 1500);
   };
 
   return (
-    <div className="home-container">
-      <h1>YOLO Object Detection</h1>
-      <p>Upload an image and detect objects using a YOLO model.</p>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        py: 6,
+        px: 2,
+        background: "linear-gradient(135deg, #f0f4f8 0%, #d9e4f5 100%)"
+      }}
+    >
+      <Container maxWidth="md">
+        {/* Header */}
+        <Box textAlign="center" mb={4}>
+          <Typography variant="h4" fontWeight={600} gutterBottom>
+            YOLO Object Detection
+          </Typography>
+          <Typography variant="subtitle1" color="text.secondary">
+            Upload an image and detect objects instantly using a YOLO model.
+          </Typography>
+        </Box>
 
-      <ImageUploader onUpload={handleUpload} />
+        {/* Upload Section */}
+        <Card sx={{ mb: 4, borderRadius: 3, boxShadow: 4 }}>
+          <CardContent sx={{ textAlign: "center" }}>
+            <Typography variant="h6" gutterBottom>
+              Step 1: Upload Image
+            </Typography>
+            <ImageUploader onUpload={handleUpload} />
+          </CardContent>
+        </Card>
 
-      {image && (
-        <button onClick={handleDetect} className="detect-btn" disabled={loading}>
-          {loading ? "Detecting..." : "Detect"}
-        </button>
-      )}
+        {/* Detect Button */}
+        {image && (
+          <Box textAlign="center" mb={4}>
+            <Button
+              onClick={handleDetect}
+              variant="contained"
+              size="large"
+              startIcon={
+                loading ? (
+                  <CircularProgress size={20} color="inherit" />
+                ) : (
+                  <SearchIcon />
+                )
+              }
+              disabled={loading}
+              sx={{
+                borderRadius: 2,
+                px: 4,
+                py: 1.2,
+                backgroundColor: "#1976d2",
+                "&:hover": { backgroundColor: "#115293" }
+              }}
+            >
+              {loading ? "Detecting..." : "Run Detection"}
+            </Button>
+          </Box>
+        )}
 
-      <DetectionResult boxes={boxes} imageUrl={imageUrl} />
-    </div>
+        {/* Detection Results */}
+        {imageUrl && <DetectionResult boxes={boxes} imageUrl={imageUrl} />}
+      </Container>
+    </Box>
   );
 }
 
