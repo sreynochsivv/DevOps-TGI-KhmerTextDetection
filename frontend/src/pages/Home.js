@@ -79,10 +79,10 @@ function Home() {
         {/* Header */}
         <Box textAlign="center" mb={4}>
           <Typography variant="h4" fontWeight={600} gutterBottom>
-            YOLO Object Detection
+            Khmer Letter Detection
           </Typography>
           <Typography variant="subtitle1" color="text.secondary">
-            Upload an image and detect objects instantly using a YOLO model.
+            Upload an image and detect Khmer letters instantly.
           </Typography>
         </Box>
 
