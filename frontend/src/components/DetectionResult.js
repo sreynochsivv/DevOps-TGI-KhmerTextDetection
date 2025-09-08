@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import { Card, CardContent, Typography, Box } from "@mui/material";
 
-function DetectionResult({ boxes, imageUrl }) {
+function DetectionResult({ boxes, labels, imageUrl }) { // <-- add labels prop
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -20,16 +20,26 @@ function DetectionResult({ boxes, imageUrl }) {
       // Draw image
       ctx.drawImage(img, 0, 0);
 
-      // Draw boxes
+      // Draw boxes + labels
       ctx.strokeStyle = "#ff1744"; // red accent
       ctx.lineWidth = 2;
-      boxes.forEach(([x, y, w, h]) => {
+      ctx.font = "16px Arial";
+      ctx.fillStyle = "#ff1744";
+
+      boxes.forEach(([x, y, w, h], i) => {
         const x1 = x - w / 2;
         const y1 = y - h / 2;
+
+        // Draw bounding box
         ctx.strokeRect(x1, y1, w, h);
+
+        // Draw label text
+        if (labels && labels[i]) {
+          ctx.fillText(labels[i], x1, Math.max(y1 - 5, 15));
+        }
       });
     };
-  }, [boxes, imageUrl]);
+  }, [boxes, labels, imageUrl]); // <-- add labels dependency
 
   if (!imageUrl) return null;
 
